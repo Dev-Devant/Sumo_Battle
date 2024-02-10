@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour{
         if (other.gameObject.CompareTag("Enemy")) {
             Rigidbody enemyRb= other.gameObject.GetComponent<Rigidbody>();
             Vector3 dir = (other.transform.position - transform.position);
-            enemyRb.AddForce(Normalize(dir) * 10 , ForceMode.Impulse);
+            enemyRb.AddForce(dir.normalized * 10 , ForceMode.Impulse);
         }
 
 

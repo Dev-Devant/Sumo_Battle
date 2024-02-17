@@ -42,19 +42,25 @@ public class PlayerController : MonoBehaviour{
 
         if ( isAPowerup && !hasPowerUp){
             hasPowerUp = true;
+            int index = 0;
             Destroy( other.gameObject );
             Instantiate(VFXPowerup,transform.position,VFXPowerup.transform.rotation);
             if ( madeBig ){
                 gameObject.transform.localScale  *= 2;
                 indicators[0].GetComponent<Indicator>().activate = true;
+                index = 0;
             }
             if ( madeFast ){
                 Force  *= 1.5f;
+                indicators[1].GetComponent<Indicator>().activate = true;
+                index = 1;
             }
             if ( madeStrong ){
                 contactForce  *= 5.0f;
+                indicators[2].GetComponent<Indicator>().activate = true;
+                index = 0;
             }        
-            StartCoroutine(wait(10));
+            StartCoroutine(wait(10,index));
         }        
 
     }
@@ -67,13 +73,13 @@ public class PlayerController : MonoBehaviour{
         }
     }
 
-    IEnumerator wait(float timer){
+    IEnumerator wait(float timer,int index){
         yield return new WaitForSeconds(timer);
         hasPowerUp = false;
         transform.localScale = initSize;
         Force = initForce;
         contactForce = initContactForce;
-        indicators[0].GetComponent<Indicator>().activate = false;
+        indicators[index].GetComponent<Indicator>().activate = false;
     }
 
 }

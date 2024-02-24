@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /*
@@ -18,12 +19,15 @@ public class SpawnManager : MonoBehaviour{
     public float spawningArea = 9;
     private int ronda = 1;
     private GameObject[] npcs ;
+    private GameObject[] pow ;
     private string moveTag = "Player"; 
     private string killTag = "NPC";
     void Start()   {
         int index = Random.Range(0,enemy.Length);
-        spawneador(enemy[index]);
-
+        npcs = new GameObject[ronda];
+        GameObject generated = spawneador(enemy[index]);
+        npcs[0] = generated;
+        pow = new GameObject[1];
     }
 
     void Update(){
@@ -43,15 +47,33 @@ public class SpawnManager : MonoBehaviour{
     private void OnCollisionEnter(Collision ball){
         if(ball.gameObject.CompareTag(killTag)){
             Destroy(ball.gameObject);
-            ronda += 1;
-            for (int i = 0; i< ronda; i++){
-                int index = Random.Range(0,enemy.Length);
-                spawneador(enemy[index]);
+            
+            int elementosVivos = npcs.Length -1;
+            for(int i = 0; i < npcs.Length;i ++){
+                if ( npcs[i] == null ) {
+                    elementosVivos -= 1;
+                }
             }
-            if(ronda >= 4){
-                for (int i = 0; i< 0.5 * ronda - 2; i++){
-                    int index = Random.Range(0,powers.Length);
-                    spawneador(powers[index]);                
+
+            if ( elementosVivos == 0){
+                ronda += 1; 
+                npcs = new GameObject[ronda];
+                for (int i = 0; i< ronda; i++){
+                    int index = Random.Range(0,enemy.Length);
+                    npcs[i] =  spawneador(enemy[index]);
+                }
+                if(ronda >= 4){
+                    int maxPower = Mathf.FloorToInt(ronda/2 - 2);
+                    for (int i = 0; i< pow.Length; i++){
+                        if(pow[i] != null){
+                            Destroy(pow[i]);
+                        }                        
+                    }
+                    pow = new GameObject[maxPower];
+                    for (int i = 0; i< maxPower; i++){
+                        int index = Random.Range(0,powers.Length);
+                        pow[i] = spawneador(powers[index]);                
+                    }
                 }
             }
         }

@@ -17,7 +17,8 @@ public class SpawnManager : MonoBehaviour{
     public GameObject[] enemy;
     public GameObject[] powers;
     public float spawningArea = 9;
-    private int ronda = 1;
+    public int ronda = 1;
+    public int restantes = 1;
     private GameObject[] npcs ;
     private GameObject[] pow ;
     private string moveTag = "Player"; 
@@ -48,15 +49,16 @@ public class SpawnManager : MonoBehaviour{
         if(ball.gameObject.CompareTag(killTag)){
             Destroy(ball.gameObject);
             
-            int elementosVivos = npcs.Length -1;
+            restantes = npcs.Length -1;
             for(int i = 0; i < npcs.Length;i ++){
                 if ( npcs[i] == null ) {
-                    elementosVivos -= 1;
+                    restantes -= 1;
                 }
             }
 
-            if ( elementosVivos == 0){
+            if ( restantes == 0){
                 ronda += 1; 
+                
                 npcs = new GameObject[ronda];
                 for (int i = 0; i< ronda; i++){
                     int index = Random.Range(0,enemy.Length);
@@ -75,10 +77,17 @@ public class SpawnManager : MonoBehaviour{
                         pow[i] = spawneador(powers[index]);                
                     }
                 }
+                restantes = npcs.Length;
             }
         }
         if(ball.gameObject.CompareTag(moveTag)){
             ball.gameObject.transform.position = randomPointInCircle();
+            PlayerController pc = ball.gameObject.GetComponent<PlayerController>();
+            pc.resetPowerUp();
+            for (int i= 0 ; i < pc.indicators.Length;i++){
+                Indicator ind = pc.indicators[i].GetComponent<Indicator>();
+                ind.activate = false;
+            }
         }
     }
 

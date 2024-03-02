@@ -12,10 +12,10 @@ public class EnemyScript : MonoBehaviour{
         player = GameObject.Find("Player");
         enemyRB = GetComponent<Rigidbody>();
       }
-
+    
     void Update()    {
         Vector3 vectDist = (player.transform.position - transform.position).normalized;
-  
+
         enemyRB.AddForce(vectDist * force);
 
     }

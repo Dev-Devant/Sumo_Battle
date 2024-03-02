@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour{
     private float initForce ;
     private float initContactForce ;
 
+    public string PowerName  =  "Sin poder";
+
     void Start()   {
         playerRb = GetComponent<Rigidbody>();
         focal = GameObject.Find("FocalPoint");
@@ -49,16 +51,19 @@ public class PlayerController : MonoBehaviour{
                 gameObject.transform.localScale  *= 2;
                 indicators[0].GetComponent<Indicator>().activate = true;
                 index = 0;
+                PowerName = "Poder Gordo!";
             }
             if ( madeFast ){
                 Force  *= 1.5f;
                 indicators[1].GetComponent<Indicator>().activate = true;
                 index = 1;
+                PowerName = "Poder Flasho!";
             }
             if ( madeStrong ){
                 contactForce  *= 5.0f;
                 indicators[2].GetComponent<Indicator>().activate = true;
-                index = 0;
+                index = 2;
+                PowerName = "Poder Hulko!";
             }        
             StartCoroutine(wait(10,index));
         }        
@@ -75,11 +80,13 @@ public class PlayerController : MonoBehaviour{
 
     IEnumerator wait(float timer,int index){
         yield return new WaitForSeconds(timer);
+        indicators[index].GetComponent<Indicator>().activate = false;
+    }
+    public void resetPowerUp(){
         hasPowerUp = false;
         transform.localScale = initSize;
         Force = initForce;
-        contactForce = initContactForce;
-        indicators[index].GetComponent<Indicator>().activate = false;
+        contactForce = initContactForce;       
+        PowerName = "Sin poder"; 
     }
-
 }

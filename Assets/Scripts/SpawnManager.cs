@@ -23,15 +23,29 @@ public class SpawnManager : MonoBehaviour{
     private GameObject[] pow ;
     private string moveTag = "Player"; 
     private string killTag = "NPC";
-    void Start()   {
-        int index = Random.Range(0,enemy.Length);
-        npcs = new GameObject[ronda];
-        GameObject generated = spawneador(enemy[index]);
-        npcs[0] = generated;
-        pow = new GameObject[1];
+    public bool Playing = true;
+    private GameObject player;
+    private GuiScript guis ;
+    private float auxiliarTimer = 0;
+    void Start()   {       
+        guis = GameObject.Find("Canvas").GetComponent<GuiScript>();
+        player = GameObject.Find("Player");
+        resetNpcs();
+        resetPlayer(player);
     }
 
     void Update(){
+        if (!Playing){
+            auxiliarTimer += Time.deltaTime;
+            if( auxiliarTimer > 5.0f && Input.anyKeyDown){
+                Playing = true;
+                auxiliarTimer = 0.0f;
+                resetNpcs();
+                resetPlayer(player);
+                guis.gameRestarter();
+            }
+        }
+       
     }
 
     private Vector3 randomPointInCircle(){
@@ -46,6 +60,9 @@ public class SpawnManager : MonoBehaviour{
         return generated;
     }
     private void OnCollisionEnter(Collision ball){
+        if(!Playing){
+            return;
+        }
         if(ball.gameObject.CompareTag(killTag)){
             Destroy(ball.gameObject);
             
@@ -81,15 +98,29 @@ public class SpawnManager : MonoBehaviour{
             }
         }
         if(ball.gameObject.CompareTag(moveTag)){
-            ball.gameObject.transform.position = randomPointInCircle();
-            PlayerController pc = ball.gameObject.GetComponent<PlayerController>();
-            pc.resetPowerUp();
-            for (int i= 0 ; i < pc.indicators.Length;i++){
-                Indicator ind = pc.indicators[i].GetComponent<Indicator>();
-                ind.activate = false;
-            }
+            resetPlayer(ball.gameObject);
+            guis.gameOverizer(); 
+            Playing = false;
         }
     }
 
+    public void resetNpcs(){
+        int index = Random.Range(0,enemy.Length);
+        ronda = 1;
+        npcs = new GameObject[ronda];
+        GameObject generated = spawneador(enemy[index]);
+        npcs[0] = generated;
+        pow = new GameObject[1];
+    }
+    public void resetPlayer(GameObject ball){
+        ball.transform.position = randomPointInCircle();
+        PlayerController pc = ball.GetComponent<PlayerController>();
+        pc.resetPowerUp();
+        for (int i= 0 ; i < pc.indicators.Length;i++){
+            Indicator ind = pc.indicators[i].GetComponent<Indicator>();
+            ind.activate = false;
+        }
+
+    }
 
 }

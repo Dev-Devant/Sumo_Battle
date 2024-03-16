@@ -9,18 +9,18 @@ public class GuiScript : MonoBehaviour{
     public TMP_Text guiEnemys;
     public TMP_Text guiPowers;
     public GameObject gameOver;
-    private SpawnManager spwManager;
     private PlayerController pc;
-
+    private GameManager gm;
     void Start()    {
-        spwManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();     
         pc = GameObject.Find("Player").GetComponent<PlayerController>();
         gameOver.SetActive(false);
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+
     }
 
     void Update()    {
-        guiRondas.text = "Rondas: " + spwManager.ronda;
-        guiEnemys.text = "Quedan: " + spwManager.restantes;
+        guiRondas.text = "Rondas: " + gm.ronda;
+        guiEnemys.text = "Quedan: " + gm.restantes;
         guiPowers.text = "" + pc.PowerName;
     }
 

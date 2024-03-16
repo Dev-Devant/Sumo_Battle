@@ -16,29 +16,28 @@ public class SpawnManager : MonoBehaviour{
 
     public GameObject[] enemy;
     public GameObject[] powers;
-    public float spawningArea = 9;
-    public int ronda = 1;
-    public int restantes = 1;
+
     private GameObject[] npcs ;
     private GameObject[] pow ;
     private string moveTag = "Player"; 
     private string killTag = "NPC";
-    public bool Playing = true;
     private GameObject player;
     private GuiScript guis ;
     private float auxiliarTimer = 0;
+    private GameManager gm;
     void Start()   {       
         guis = GameObject.Find("Canvas").GetComponent<GuiScript>();
         player = GameObject.Find("Player");
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         resetNpcs();
         resetPlayer(player);
     }
 
     void Update(){
-        if (!Playing){
+        if (!gm.Playing){
             auxiliarTimer += Time.deltaTime;
             if( auxiliarTimer > 5.0f && Input.anyKeyDown){
-                Playing = true;
+                gm.Playing = true;
                 auxiliarTimer = 0.0f;
                 resetNpcs();
                 resetPlayer(player);
@@ -49,8 +48,8 @@ public class SpawnManager : MonoBehaviour{
     }
 
     private Vector3 randomPointInCircle(){
-        float x = Random.Range(-spawningArea,spawningArea);
-        float z = Random.Range(-spawningArea,spawningArea);
+        float x = Random.Range(-gm.spawningArea,gm.spawningArea);
+        float z = Random.Range(-gm.spawningArea,gm.spawningArea);
         return new Vector3(x,0,z);
     }
 
@@ -60,29 +59,36 @@ public class SpawnManager : MonoBehaviour{
         return generated;
     }
     private void OnCollisionEnter(Collision ball){
-        if(!Playing){
+        if(!gm.Playing){
             return;
         }
         if(ball.gameObject.CompareTag(killTag)){
             Destroy(ball.gameObject);
             
-            restantes = npcs.Length -1;
+            gm.restantes = npcs.Length -1;
             for(int i = 0; i < npcs.Length;i ++){
                 if ( npcs[i] == null ) {
-                    restantes -= 1;
+                    gm.restantes -= 1;
                 }
             }
 
-            if ( restantes == 0){
-                ronda += 1; 
+            if ( gm.restantes == 0){
+                gm.ronda += 1; 
                 
-                npcs = new GameObject[ronda];
-                for (int i = 0; i< ronda; i++){
-                    int index = Random.Range(0,enemy.Length);
+                npcs = new GameObject[gm.ronda];
+                for (int i = 0; i< gm.ronda; i++){
+                    int add = 0;
+                    if(gm.ronda > 7){
+                        add += 1;
+                        if(gm.ronda > 10){
+                            add += 1;
+                        }
+                    }
+                    int index = Random.Range(0,enemy.Length - 2 + add);
                     npcs[i] =  spawneador(enemy[index]);
                 }
-                if(ronda >= 4){
-                    int maxPower = Mathf.FloorToInt(ronda/2 - 2);
+                if(gm.ronda >= 5){
+                    int maxPower = Mathf.FloorToInt(gm.ronda/2 - 2);
                     for (int i = 0; i< pow.Length; i++){
                         if(pow[i] != null){
                             Destroy(pow[i]);
@@ -94,20 +100,30 @@ public class SpawnManager : MonoBehaviour{
                         pow[i] = spawneador(powers[index]);                
                     }
                 }
-                restantes = npcs.Length;
+                gm.restantes = npcs.Length;
             }
         }
-        if(ball.gameObject.CompareTag(moveTag)){
+        if(ball.gameObject.CompareTag(moveTag)  ){
             resetPlayer(ball.gameObject);
             guis.gameOverizer(); 
-            Playing = false;
+            gm.Playing = false;
         }
     }
 
     public void resetNpcs(){
-        int index = Random.Range(0,enemy.Length);
-        ronda = 1;
-        npcs = new GameObject[ronda];
+        int index = Random.Range(0,enemy.Length - 3);
+        gm.ronda = 1;
+        
+        if(npcs != null){
+            for (int i = 0; i < npcs.Length ;i++ ){
+                if(npcs[i] == null){
+                    continue;
+                }
+                Destroy(npcs[i]);
+            }
+        }
+        
+        npcs = new GameObject[gm.ronda];
         GameObject generated = spawneador(enemy[index]);
         npcs[0] = generated;
         pow = new GameObject[1];

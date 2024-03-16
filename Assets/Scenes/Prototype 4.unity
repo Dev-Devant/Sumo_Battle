@@ -1717,6 +1717,54 @@ MonoBehaviour:
   - {fileID: 147438421}
   - {fileID: 1900336493}
   PowerName: Ninguno
+--- !u!1 &1477765870
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1477765872}
+  - component: {fileID: 1477765871}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1477765871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1477765870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6582e7bd5f54aad4cb575ab079c46b2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawningArea: 9
+  ronda: 1
+  Playing: 1
+  restantes: 1
+--- !u!4 &1477765872
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1477765870}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 293.96857, y: 155.37297, z: -30.470211}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1479440266
 GameObject:
   m_ObjectHideFlags: 0
@@ -2327,18 +2375,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy:
-  - {fileID: 1874797352801109567, guid: b70e644b09b402e4b90c2e0e77c85a91, type: 3}
   - {fileID: 1874797352801109567, guid: 96a1240daf9fcff489d24f95591a3c79, type: 3}
   - {fileID: 1874797352801109567, guid: b2c79c604950e13449c4e4138bf1c84a, type: 3}
   - {fileID: 1874797352801109567, guid: ff41265cfbc9106448da61895c7dc277, type: 3}
+  - {fileID: 1874797352801109567, guid: b70e644b09b402e4b90c2e0e77c85a91, type: 3}
   powers:
   - {fileID: 8048106976256789003, guid: 738d4d30e5c4162428220ec0d527b3df, type: 3}
   - {fileID: 5982984207528130365, guid: 35805d72c004eb04883094cdf79fcef0, type: 3}
   - {fileID: 2408680774344407692, guid: 5fc98ce75164d7247ad93587167a1347, type: 3}
-  spawningArea: 9
-  ronda: 1
-  restantes: 1
-  Playing: 1
 --- !u!1001 &7305732181041295649
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2429,3 +2473,4 @@ SceneRoots:
   - {fileID: 1989076324}
   - {fileID: 1057840611}
   - {fileID: 280959916}
+  - {fileID: 1477765872}

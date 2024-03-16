@@ -19,20 +19,23 @@ public class PlayerController : MonoBehaviour{
     private float initContactForce ;
 
     public string PowerName  =  "Sin poder";
-
+    private GameManager gm;
     void Start()   {
         playerRb = GetComponent<Rigidbody>();
         focal = GameObject.Find("FocalPoint");
         initSize = transform.localScale;
         initForce = Force;
         initContactForce = contactForce;
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     void Update()    {
-        float Vimp = Input.GetAxis("Vertical");
-        float vhor = Input.GetAxis("Horizontal");
-        Vector3 director = (Vector3.forward * Vimp - Vector3.left * vhor);
-        playerRb.AddForce(director * Force * Time.deltaTime ,ForceMode.Impulse);
+        if(gm.Playing){
+            float Vimp = Input.GetAxis("Vertical");
+            float vhor = Input.GetAxis("Horizontal");
+            Vector3 director = (Vector3.forward * Vimp - Vector3.left * vhor);
+            playerRb.AddForce(director * Force * Time.deltaTime ,ForceMode.Impulse);
+        }
     }
 
     void OnTriggerEnter( Collider other ){
